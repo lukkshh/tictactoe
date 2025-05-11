@@ -92,16 +92,16 @@ export default function Game({
           </div>
         ))}
       </div>
-      {/* {gameOver && ( */}
-      <button
-        onClick={() => {
-          HandleReset();
-        }}
-        className="mt-6 px-4 py-2 cursor-pointer rounded-md bg-neutral-600 text-white"
-      >
-        Play Again
-      </button>
-      {/* )} */}
+      {gameOver && (
+        <button
+          onClick={() => {
+            HandleReset();
+          }}
+          className="mt-6 px-4 py-2 cursor-pointer rounded-md bg-neutral-600 text-white"
+        >
+          Play Again
+        </button>
+      )}
     </section>
   );
 }

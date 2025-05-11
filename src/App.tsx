@@ -5,6 +5,7 @@ import Game from "./components/Game";
 import type { Player } from "./components/Game";
 
 import "./global.css";
+import ThemeButton from "./components/ThemeButton";
 
 function App() {
   const [xWins, setXWins] = useState<number>(0);
@@ -17,7 +18,10 @@ function App() {
 
   return (
     <section className="w-full min-h-dvh   dark:bg-neutral-950">
-      <Counter xWins={xWins} oWins={oWins} />
+      <div className="flex justify-between p-4">
+        <Counter xWins={xWins} oWins={oWins} />
+        <ThemeButton />
+      </div>
       <Game onWin={handleWin} className="mt-4" />
     </section>
   );

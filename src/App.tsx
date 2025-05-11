@@ -1,82 +1,24 @@
 import { useState } from "react";
+
+import Counter from "./components/Counter";
+import Game from "./components/Game";
+import type { Player } from "./components/Game";
+
 import "./global.css";
 
-type Player = "X" | "O";
-
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [player, setPlayer] = useState<Player>("X");
-  const [winner, setWinner] = useState<Player | null>();
-  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [xWins, setXWins] = useState<number>(0);
+  const [oWins, setOWins] = useState<number>(0);
 
-  const WinningTiles = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-
-  const HandleClick = (index: number) => {
-    if (board[index] || gameOver) return;
-
-    const newBoard = [...board];
-    newBoard[index] = player;
-    setBoard(newBoard);
-
-    const hasWon = WinningTiles.some((combo) =>
-      combo.every((i) => newBoard[i] === player)
-    );
-
-    if (hasWon) {
-      setGameOver(true);
-      setWinner(player);
-      return;
-    }
-
-    const isFull = newBoard.every((tile) => tile !== null);
-
-    if (isFull) {
-      setGameOver(true);
-      return;
-    }
-
-    setPlayer((prev) => (prev === "X" ? "O" : "X"));
+  const handleWin = (player: Player) => {
+    if (player === "X") setXWins(xWins + 1);
+    else setOWins(oWins + 1);
   };
 
   return (
-    <section className="w-full h-screen dark:bg-neutral-950 flex items-center justify-center flex-col">
-      <div className="mb-8 dark:text-white">
-        {gameOver ? (
-          <p className="text-3xl">
-            {gameOver
-              ? winner
-                ? `${winner} Won The Game`
-                : "It's a draw!"
-              : ""}
-          </p>
-        ) : (
-          <p className="text-2xl">{player} Turn</p>
-        )}
-      </div>
-      <div className="grid grid-cols-3 grid-rows-3">
-        {board.map((tile, index) => (
-          <div
-            onClick={() => {
-              HandleClick(index);
-            }}
-            key={index}
-            className={`${tile === null ? "" : "pointer-events-none"} ${
-              gameOver ? "pointer-events-none" : ""
-            } w-[150px] h-[150px] max-md:w-[100px] max-md:h-[100px] dark:text-white dark:border-neutral-700 text-2xl cursor-pointer font-bold flex justify-center items-center border-2`}
-          >
-            {tile}
-          </div>
-        ))}
-      </div>
+    <section className="w-full min-h-dvh   dark:bg-neutral-950">
+      <Counter xWins={xWins} oWins={oWins} />
+      <Game onWin={handleWin} className="mt-4" />
     </section>
   );
 }

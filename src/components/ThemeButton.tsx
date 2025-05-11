@@ -4,7 +4,15 @@ export default function ThemeButton() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
+    let savedTheme = localStorage.getItem("theme");
+
+    if (!savedTheme) {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      savedTheme = prefersDark ? "dark" : "light";
+      localStorage.setItem("theme", savedTheme);
+    }
 
     if (savedTheme && savedTheme === "dark") {
       setTheme("dark");
